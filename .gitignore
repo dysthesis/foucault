@@ -1,0 +1,4 @@
+.direnv/
+.luarc.json
+result
+out
