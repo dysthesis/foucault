@@ -1,4 +1,5 @@
 {
+  kak-lsp,
   pkgs,
   self,
   ripgrep,
@@ -24,7 +25,11 @@
       smarttab-kak
     ];
   };
-  deps = [ripgrep fd];
+  deps = [
+    kak-lsp
+    ripgrep
+    fd
+  ];
 in
   mkWrapper pkgs customKakoune ''
     wrapProgram $out/bin/kak \
