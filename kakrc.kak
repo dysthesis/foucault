@@ -19,8 +19,11 @@ define-command -docstring "Pick a file with fzf" fzf-pick %{
       		            echo "$(tput setaf 244)$dirname/$(tput sgr0)$(tput bold)$basename$(tput sgr0)"
       		          fi
       		      done |
-                fzf-tmux -d 20 --ansi
-            )
+                fzf-tmux \
+                  -d 20 \
+                  --ansi \
+                  --preview="bat --style=numbers --color=always {}"
+      	    )
         else
             file=$(
                 rg --files --hidden --follow --glob '!.git/*' | while IFS= read -r path; do
@@ -34,6 +37,7 @@ define-command -docstring "Pick a file with fzf" fzf-pick %{
                 done |
                 fzf \
                   --ansi \
+                  --preview="bat --style=number --color=always {}" \
                   --height 80% \
                   --reverse \
                   --border
@@ -60,14 +64,14 @@ define-command fzf-grep -docstring 'live grep' %{
         if [ -n "${kak_client_env_TMUX}" ]; then
             selection=$(TMUX="$kak_client_env_TMUX" fzf-tmux -d 20 -- \
                 --ansi --delimiter ':' \
-                --preview 'bat --color=auto --highlight-line {2} {1} 2>/dev/null || cat {1}' \
-                --preview-window 'right,55%,wrap' \
+                --preview 'bat --color=always --style=numbers --highlight-line {2} {1} 2>/dev/null' \
+                --preview-window 'right:65%:wrap:+{2}-3' \
                 --bind "change:reload($reload_cmd)+first")
         else
             selection=$(fzf --height=80% \
                 --ansi --delimiter ':' \
-                --preview 'bat --color=auto --highlight-line {2} {1} 2>/dev/null || cat {1}' \
-                --preview-window 'right,55%,wrap' \
+                --preview 'bat --color=always --highlight-line --style=numbers {2} {1} 2>/dev/null' \
+                --preview-window 'right:65%:wrap:+{2}-3' \
                 --bind "change:reload($reload_cmd)+first")
         fi
 
