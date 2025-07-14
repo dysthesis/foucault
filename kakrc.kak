@@ -1,8 +1,9 @@
-set-option -add global ui_options terminal_assistant=none
+set-option -add global ui_options terminal_assistant=cat
 # Set up LSP
 eval %sh{kak-lsp}
 hook global WinSetOption filetype=(rust|python|zig|c|cpp|typst|nix) %{
     lsp-enable-window
+    lsp-inlay-hints-enable global
     hook window -group semantic-tokens BufReload .* lsp-semantic-tokens
     hook window -group semantic-tokens NormalIdle .* lsp-semantic-tokens
     hook window -group semantic-tokens InsertIdle .* lsp-semantic-tokens
