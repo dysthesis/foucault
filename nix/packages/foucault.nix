@@ -62,7 +62,6 @@
       config
       parinfer-rust
       smarttab-kak
-      kakoune-catppuccin
     ];
   };
   deps = [

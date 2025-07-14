@@ -1,6 +1,22 @@
+set-option -add global ui_options terminal_assistant=none
 # Set up LSP
 eval %sh{kak-lsp}
-hook global WinSetOption filetype=(rust|python|zig|c|cpp|typst) %{ lsp-enable-window }
+hook global WinSetOption filetype=(rust|python|zig|c|cpp|typst|nix) %{
+    lsp-enable-window
+    hook window -group semantic-tokens BufReload .* lsp-semantic-tokens
+    hook window -group semantic-tokens NormalIdle .* lsp-semantic-tokens
+    hook window -group semantic-tokens InsertIdle .* lsp-semantic-tokens
+    map global user l ':enter-user-mode lsp<ret>' -docstring 'LSP mode'
+
+    map global insert <tab> '<a-;>:try lsp-snippets-select-next-placeholders catch %{ execute-keys -with-hooks <lt>tab> }<ret>' -docstring 'Select next snippet placeholder'
+
+    map global object a '<a-semicolon>lsp-object<ret>' -docstring 'LSP any symbol'
+    map global object <a-a> '<a-semicolon>lsp-object<ret>' -docstring 'LSP any symbol'
+    map global object f '<a-semicolon>lsp-object Function Method<ret>' -docstring 'LSP function or method'
+    map global object t '<a-semicolon>lsp-object Class Interface Struct<ret>' -docstring 'LSP class interface or struct'
+    map global object d '<a-semicolon>lsp-diagnostic-object --include-warnings<ret>' -docstring 'LSP errors and warnings'
+    map global object D '<a-semicolon>lsp-diagnostic-object<ret>' -docstring 'LSP errors'
+}
 
 # Set up tree-sitter
 eval %sh{ kak-tree-sitter --with-highlighting --with-text-objects -dks --init $kak_session }
@@ -23,7 +39,7 @@ define-command -docstring "Pick a file with fzf" fzf-pick %{
                   -d 20 \
                   --ansi \
                   --preview="bat --style=numbers --color=always {}"
-      	    )
+            )
         else
             file=$(
                 rg --files --hidden --follow --glob '!.git/*' | while IFS= read -r path; do
@@ -87,3 +103,56 @@ define-command fzf-grep -docstring 'live grep' %{
 }
 
 map global user g ': fzf-grep<ret>' -docstring 'fzf grep'
+
+# Default colorscheme
+
+# Code highlighting
+face global value     bright-magenta
+face global type      bright-yellow
+face global variable  bright-blue
+face global module    bright-yellow
+face global function  bright-green+b
+face global string    bright-green+i
+face global keyword   bright-red
+face global operator  bright-blue
+face global attribute yellow
+face global comment   white+dai
+face global meta      bright-cyan
+face global builtin   default+b
+
+# Markup
+face global title         bright-green+b
+face global header        bright-blue+b
+face global bold          default,default+ba
+face global italic        default,default+ia
+face global underline     default,default+ufa
+face global strikethrough default,default+sa
+face global mono          white
+face global block         white
+face global link          bright-magenta+u
+face global bullet        bright-cyan
+
+face global Default            default,default
+face global PrimarySelection   default,bright-black+g
+face global PrimaryCursor      black,bright-white+fg
+face global PrimaryCursorEol   black,bright-white+fg
+face global SecondarySelection default,bright-black+g
+face global SecondaryCursor    black,white+fg
+face global SecondaryCursorEol black,white+fg
+face global LineNumbers        bright-black
+face global LineNumberCursor   yellow
+face global LineNumbersWrapped black
+face global MenuForeground     bright-white,black+b
+face global MenuBackground     white,bright-black
+face global MenuInfo           bright-blue
+face global Information        bright-white,bright-black
+face global Error              bright-red,default+b
+face global StatusLine         white,bright-black
+face global StatusLineMode     cyan
+face global StatusLineInfo     green
+face global StatusLineValue    bright-red
+face global StatusCursor       black,bright-white
+face global Prompt             default
+face global MatchingChar       blue,default+b
+face global BufferPadding      black,default
+face global Whitespace         bright-black+f
