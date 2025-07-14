@@ -55,7 +55,7 @@ define-command fzf-grep -docstring 'live grep' %{
         grep_tool="rg"
 
         if [ "$grep_tool" = "rg" ] && command -v rg >/dev/null 2>&1; then
-            reload_cmd="rg --vimgrep --smart-case --color=auto -- {q} || true"
+            reload_cmd="rg --vimgrep --smart-case --color=always -- {q} || true"
         else
             [ "$grep_tool" != "grep" ] && echo "echo -markup '{Information}''$grep_tool'' not found, falling back to grep.'"
             reload_cmd="grep -RHn --color=auto -- {q} . 2>/dev/null | sed 's/\\([^:]*\\):\\([^:]*\\):/\\1:\\2:1:/' || true"
@@ -63,7 +63,8 @@ define-command fzf-grep -docstring 'live grep' %{
 
         if [ -n "${kak_client_env_TMUX}" ]; then
             selection=$(TMUX="$kak_client_env_TMUX" fzf-tmux -d 20 -- \
-                --ansi --delimiter ':' \
+                --ansi \
+                --delimiter ':' \
                 --preview 'bat --color=always --style=numbers --highlight-line {2} {1} 2>/dev/null' \
                 --preview-window 'right:65%:wrap:+{2}-3' \
                 --bind "change:reload($reload_cmd)+first")
