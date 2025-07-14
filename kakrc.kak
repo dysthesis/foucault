@@ -17,6 +17,33 @@ hook global WinSetOption filetype=(rust|python|zig|c|cpp|typst|nix) %{
     map global object d '<a-semicolon>lsp-diagnostic-object --include-warnings<ret>' -docstring 'LSP errors and warnings'
     map global object D '<a-semicolon>lsp-diagnostic-object<ret>' -docstring 'LSP errors'
 }
+hook -group lsp-filetype-rust global BufSetOption filetype=rust %{
+    set-option buffer lsp_servers %{
+        [rust-analyzer]
+        root_globs = ["Cargo.toml"]
+        single_instance = true
+        [rust-analyzer.experimental]
+        commands.commands = ["rust-analyzer.runSingle"]
+        hoverActions = true
+        [rust-analyzer.settings.rust-analyzer]
+        # See https://rust-analyzer.github.io/manual.html#configuration
+        # cargo.features = []
+        check.command = "clippy"
+        [rust-analyzer.symbol_kinds]
+        Constant = "const"
+        Enum = "enum"
+        EnumMember = ""
+        Field = ""
+        Function = "fn"
+        Interface = "trait"
+        Method = "fn"
+        Module = "mod"
+        Object = ""
+        Struct = "struct"
+        TypeParameter = "type"
+        Variable = "let"
+    }
+}
 
 # Set up tree-sitter
 eval %sh{ kak-tree-sitter --with-highlighting --with-text-objects -dks --init $kak_session }
