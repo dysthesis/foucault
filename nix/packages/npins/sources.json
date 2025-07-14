@@ -1,20 +1,17 @@
 {
   "pins": {
     "kakoune-surround": {
-      "type": "GitRelease",
+      "type": "Git",
       "repository": {
         "type": "GitHub",
         "owner": "h-youhei",
         "repo": "kakoune-surround"
       },
-      "pre_releases": false,
-      "version_upper_bound": null,
-      "release_prefix": null,
+      "branch": "master",
       "submodules": false,
-      "version": "v2018.04.13",
-      "revision": "f9f916a4d8cb1fdac6889111c4f4f60c2a61fffd",
-      "url": "https://api.github.com/repos/h-youhei/kakoune-surround/tarball/v2018.04.13",
-      "hash": "15bwd5hr6j9frjncazb2zd98yrrh55l2l73h1vv779by2g1zb9vr"
+      "revision": "efe74c6f434d1e30eff70d4b0d737f55bf6c5022",
+      "url": "https://github.com/h-youhei/kakoune-surround/archive/efe74c6f434d1e30eff70d4b0d737f55bf6c5022.tar.gz",
+      "hash": "09fd7qhlsazf4bcl3z7xh9z0fklw69c5j32hminphihq74qrry6h"
     }
   },
   "version": 5

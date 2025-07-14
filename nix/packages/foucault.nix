@@ -15,14 +15,15 @@
 }: let
   inherit (lib.babel.pkgs) mkWrapper;
   inherit (lib) makeBinPath;
-  npins = import ./npins;
   inherit (kakouneUtils) buildKakounePluginFrom2Nix;
+  sources = import ./npins;
   kak-surround = buildKakounePluginFrom2Nix rec {
     pname = "kak-surround";
-    src = import npins.kakoune-surround;
-    inherit (src) version;
+    version = src.revision;
+    src = sources.kakoune-surround;
     meta.homepage = "https://github.com/h-youhei/kakoune-surround";
   };
+
   config = writeTextFile rec {
     name = "kakrc.kak";
     destination = "/share/kak/autoload/${name}";
