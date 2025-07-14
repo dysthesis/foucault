@@ -183,3 +183,15 @@ face global Prompt             default
 face global MatchingChar       blue,default+b
 face global BufferPadding      black,default
 face global Whitespace         bright-black+f
+
+# Plugins
+declare-user-mode surround
+map global surround s ':surround<ret>' -docstring "Surround selected text"
+map global surround c ':change-surround<ret>' -docstring "Change selected text's surroundings"
+map global surround d ':delete-surround<ret>' -docstring "Delete selected text's surroundings"
+map global surround t ':select-surrounding-tag<ret>' -docstring "Select selected text's surrounding tags"
+map global normal ^ ':enter-user-mode surround<ret>'
+
+hook global WinCreate .* %{
+  enable-auto-pairs
+}

@@ -8,12 +8,21 @@
   fd,
   kakoune,
   kakounePlugins,
+  kakouneUtils,
   writeTextFile,
   lib,
   ...
 }: let
   inherit (lib.babel.pkgs) mkWrapper;
   inherit (lib) makeBinPath;
+  npins = import ./npins;
+  inherit (kakouneUtils) buildKakounePluginFrom2Nix;
+  kak-surround = buildKakounePluginFrom2Nix rec {
+    pname = "kak-surround";
+    src = import npins.kakoune-surround;
+    inherit (src) version;
+    meta.homepage = "https://github.com/h-youhei/kakoune-surround";
+  };
   config = writeTextFile rec {
     name = "kakrc.kak";
     destination = "/share/kak/autoload/${name}";
@@ -62,6 +71,8 @@
       config
       parinfer-rust
       smarttab-kak
+      auto-pairs-kak
+      kak-surround
     ];
   };
   deps = [
